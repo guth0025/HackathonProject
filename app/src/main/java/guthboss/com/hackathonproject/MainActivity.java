@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class MainActivity extends Activity {
     ListView notifications;
@@ -55,9 +56,8 @@ public class MainActivity extends Activity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificationMessage.add(userIn.getText().toString());
+                addTextToChat(userIn.getText().toString());
                 userIn.setText("");
-                notifyAdapt.notifyDataSetChanged();
             }
         });
 
@@ -67,16 +67,28 @@ public class MainActivity extends Activity {
                 mManager.discoverPeers( mChannel, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
-                        System.out.println( "Success");
+                        addTextToChat("Success");
                     }
 
                     @Override
                     public void onFailure(int reasonCode) {
-                        System.out.println( "failed: " + reasonCode);
+                        addTextToChat("failed: " + reasonCode);
                     }
                 });
             }
         });
+    }
+
+    public void addTextToChat( String str){
+        notificationMessage.add( str);
+        notifyAdapt.notifyDataSetChanged();
+    }
+
+    public <E> void addListToChat( Collection<E> list){
+        for( E e:list){
+            notificationMessage.add( e.toString());
+        }
+        notifyAdapt.notifyDataSetChanged();
     }
 
     /* register the broadcast receiver with the intent values to be matched */
