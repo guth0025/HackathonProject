@@ -1,8 +1,6 @@
 package guthboss.com.hackathonproject;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -17,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class MainActivity extends Activity {
     ListView notifications;
@@ -25,24 +22,15 @@ public class MainActivity extends Activity {
     Button send, test;
     EditText userIn;
     ChatAdapter notifyAdapt;
-    WifiP2pManager mManager;
-    Channel mChannel;
-    BroadcastReceiver mReceiver;
-    IntentFilter mIntentFilter;
+    WiFiDirectBroadcastReceiver wifiDirect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //create receiver
-        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        WifiP2pManager manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        Channel channel = manager.initialize(this, getMainLooper(), null);
+        wifiDirect = new WiFiDirectBroadcastReceiver(manager, channel, this);
 
         setContentView(R.layout.activity_main);
         notifications = (ListView)findViewById(R.id.notification_updates);
@@ -64,29 +52,28 @@ public class MainActivity extends Activity {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mManager.discoverPeers( mChannel, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        addTextToChat("Success");
-                    }
+                wifiDirect.discoverPeers();
+            }
+        });
 
-                    @Override
-                    public void onFailure(int reasonCode) {
-                        addTextToChat("failed: " + reasonCode);
-                    }
-                });
+        test.setOnLongClickListener( new View.OnLongClickListener(){
+
+            @Override
+            public boolean onLongClick(View view) {
+                clearChat();
+                return true;
             }
         });
     }
 
-    public void addTextToChat( String str){
-        notificationMessage.add( str);
+    public void clearChat(){
+        notificationMessage.clear();
         notifyAdapt.notifyDataSetChanged();
     }
 
-    public <E> void addListToChat( Collection<E> list){
-        for( E e:list){
-            notificationMessage.add( e.toString());
+    public void addTextToChat( String ... strings){
+        for( String str:strings){
+            notificationMessage.add( str);
         }
         notifyAdapt.notifyDataSetChanged();
     }
@@ -95,51 +82,45 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mReceiver, mIntentFilter);
+        registerReceiver(wifiDirect, wifiDirect.getIntenets());
     }
 
     /* unregister the broadcast receiver */
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
+        unregisterReceiver(wifiDirect);
     }
 
-    private class ChatAdapter extends ArrayAdapter<String>
-    {
-        public ChatAdapter(Context ctx)
-        {
+    private class ChatAdapter extends ArrayAdapter<String> {
+
+        public ChatAdapter(Context ctx) {
             super(ctx,0);
 
         }
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return notificationMessage.size();
         }
 
         @Override
-        public String getItem(int position)
-        {
+        public String getItem(int position) {
             return notificationMessage.get(position);
         }
 
 
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            View result = null;
+        public View getView(int position, View convertView, ViewGroup parent){
             LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 
 
-            result = inflater.inflate(R.layout.notificationlayout,null);
+            View result = inflater.inflate(R.layout.notificationlayout,null);
 
             TextView message = (TextView)result.findViewById(R.id.notificationtextview);
             message.setText(getItem(position));
 
             return result;
         }
-
     }
 }
