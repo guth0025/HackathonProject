@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -41,18 +42,35 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             @Override
             public void onSuccess() {
                 mActivity.clearChat();
-                mActivity.addTextToChat("Success");
+                mActivity.addTextToChat( "Looking for Peers");
             }
 
             @Override
-            public void onFailure(int reasonCode){
-                mActivity.addTextToChat("failed: " + reasonCode);
+            public void onFailure(int reason){
+                mActivity.addTextToChat( "Failed peer discovery: " + reason);
             }
         });
     }
 
     public IntentFilter getIntenets(){
         return mIntentFilter;
+    }
+
+    public void connectTo(){
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = "a6:e4:b8:ab:3b:25";
+        mManager.connect( mChannel, config, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                mActivity.addTextToChat( "connecting to a6:e4:b8:ab:3b:25");
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                mActivity.addTextToChat( "Failed connect: " + reason);
+            }
+        });
     }
 
     @Override

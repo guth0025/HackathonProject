@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean onLongClick(View view) {
-                clearChat();
+                wifiDirect.connectTo();
                 return true;
             }
         });
