@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 notificationMessage.add(userIn.getText().toString());
+                userIn.setText("");
                 notifyAdapt.notifyDataSetChanged();
             }
         });
