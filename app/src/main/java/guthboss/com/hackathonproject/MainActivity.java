@@ -45,12 +45,12 @@ public class MainActivity extends Activity {
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         setContentView(R.layout.activity_main);
-        notifications = (ListView)findViewById(R.id.notificationupdates);
+        notifications = (ListView)findViewById(R.id.notification_updates);
         notificationMessage = new ArrayList<>();
         notifyAdapt = new ChatAdapter(this);
-        send = (Button)findViewById(R.id.sendnotification);
-        test = (Button)findViewById(R.id.testconnection);
-        userIn = (EditText)findViewById(R.id.enternotification);
+        send = (Button)findViewById(R.id.send_notification);
+        test = (Button)findViewById(R.id.test_connection);
+        userIn = (EditText)findViewById(R.id.enter_notification);
         notifications.setAdapter(notifyAdapt);
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +123,9 @@ public class MainActivity extends Activity {
         {
             return notificationMessage.get(position);
         }
+
+
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
@@ -135,7 +138,7 @@ public class MainActivity extends Activity {
             TextView message = (TextView)result.findViewById(R.id.notificationtextview);
             message.setText(getItem(position));
 
-            return result;//Change this in step 9
+            return result;
         }
 
     }
