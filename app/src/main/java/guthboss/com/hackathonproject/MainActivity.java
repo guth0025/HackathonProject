@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 notificationMessage.add(userIn.getText().toString());
                 userIn.setText("");
+                Toast.makeText(MainActivity.this,"Notification Sent",Toast.LENGTH_SHORT).show();
                 notifyAdapt.notifyDataSetChanged();
             }
         });
@@ -123,7 +125,8 @@ public class MainActivity extends Activity {
             TextView message = (TextView)result.findViewById(R.id.notificationtextview);
             message.setText(getItem(position));
 
-            return result;//Change this in step 9
+            return result;
+
         }
 
     }
