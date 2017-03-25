@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +42,15 @@ public class MainActivity extends Activity {
         userIn = (EditText)findViewById(R.id.enter_notification);
         notifications.setAdapter(notifyAdapt);
 
+        notifications.setOnItemClickListener( new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selected = ((TextView) view.findViewById( R.id.notificationtextview)).getText().toString();
+                selected = selected.split("\n")[1];
+                wifiDirect.connectTo( selected);
+            }
+        });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +70,6 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean onLongClick(View view) {
-                wifiDirect.connectTo();
                 return true;
             }
         });
