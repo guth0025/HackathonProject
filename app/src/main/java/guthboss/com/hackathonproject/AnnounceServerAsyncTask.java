@@ -13,8 +13,8 @@ public class AnnounceServerAsyncTask extends AsyncTask<String,String,String> {
     protected String doInBackground( String... params) {
         try (ServerSocket server = new ServerSocket(8888)){
             try (Socket client = server.accept()){
-                try (PrintWriter output = new PrintWriter(client.getOutputStream())){
-                    output.write( params[0]);
+                try (Connection connect = new Connection()){
+                    connect.connectTo(client);
                 }
             }
         } catch (IOException e) {

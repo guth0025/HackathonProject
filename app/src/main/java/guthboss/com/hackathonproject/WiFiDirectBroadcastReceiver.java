@@ -60,14 +60,14 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         return mIntentFilter;
     }
 
-    public void connectTo( String address){
+    public void connectTo( final String address){
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = address;
         mManager.connect( mChannel, config, new WifiP2pManager.ActionListener() {
 
             @Override
             public void onSuccess() {
-                mActivity.addTextToChat( "connected to a6:e4:b8:ab:3b:25");
+                mActivity.addTextToChat( "connected to: " + address);
                 new AnnounceServerAsyncTask().execute( "Hellooooooooooooooooooo");
             }
 
@@ -118,7 +118,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             mActivity.addTextToChat( "DEVICE_CHANGED_ACTION");
             // Respond to this device's wifi state changing
-            mActivity.addTextToChat(intent.getParcelableExtra( WifiP2pManager.EXTRA_WIFI_P2P_DEVICE).toString());
+            mActivity.addTextToChat(new Device((WifiP2pDevice) intent.getParcelableExtra( WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)).toString());
         }
     }
 }
