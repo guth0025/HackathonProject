@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HackathonProject</string>
+    <string name="app_name">Announce Local</string>
     <string name="text">TEST</string>
     <string name="notify">Enter Notification</string>
     <string name="send">SEND</string>

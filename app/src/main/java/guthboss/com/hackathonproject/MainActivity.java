@@ -5,6 +5,7 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
@@ -25,14 +25,15 @@ public class MainActivity extends Activity {
     ChatAdapter notifyAdapt;
     WiFiDirectBroadcastReceiver wifiDirect;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //create receiver
         WifiP2pManager manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         Channel channel = manager.initialize(this, getMainLooper(), null);
         wifiDirect = new WiFiDirectBroadcastReceiver(manager, channel, this);
-
         setContentView(R.layout.activity_main);
         notifications = (ListView)findViewById(R.id.notification_updates);
         notificationMessage = new ArrayList<>();
