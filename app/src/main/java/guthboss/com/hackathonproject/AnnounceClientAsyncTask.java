@@ -1,7 +1,6 @@
 package guthboss.com.hackathonproject;
 
 import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
