@@ -22,11 +22,12 @@
             android:id="@+id/notificationtextview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="25dp"
-
             android:background="@color/colorPrimary"
 
+            android:paddingBottom="25dp"
+
             android:text="TextView"
+            android:textColor="@color/cardview_light_background"
             android:textSize="20dp" />
 
         <ImageView
